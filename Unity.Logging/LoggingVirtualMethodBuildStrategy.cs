@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Practices.ObjectBuilder2;
 using Microsoft.Practices.Unity.InterceptionExtension;
 
-namespace UnityExtension
+namespace Unity.LoggingExtension
 {
 	internal class LoggingVirtualMethodBuildStrategy : BuilderStrategy
 	{

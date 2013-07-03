@@ -7,8 +7,8 @@
     <ProjectGuid>{3F77FBB1-6A4B-4470-9EE9-C373210AC4D6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnityExtensions.Tests</RootNamespace>
-    <AssemblyName>UnityExtensions.Tests</AssemblyName>
+    <RootNamespace>Unity.LoggingExtension.Tests</RootNamespace>
+    <AssemblyName>Unity.LoggingExtension.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace UnityExtension
+namespace Unity.LoggingExtension
 {
 	public interface ILogMethodInvocation
 	{

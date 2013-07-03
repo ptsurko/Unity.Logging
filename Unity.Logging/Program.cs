@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Practices.Unity;
 
-namespace UnityExtension
+namespace Unity.LoggingExtension
 {
 	class Program
 	{
@@ -38,13 +38,13 @@ namespace UnityExtension
 		}
 	}
 
-	[LogAttribute]
+	[Log]
 	public interface IPersistence
 	{
 		IEvent Store(IEvent @event, DateTime? date = null);
 	}
 
-    [LogAttribute]
+    [Log]
 	public class FilePersistence //: IPersistence
 	{
         public virtual IEvent Store(IEvent @event, DateTime? date = null)

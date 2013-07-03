@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace UnityExtension
+namespace Unity.LoggingExtension
 {
     public static class TypeExtensions
     {

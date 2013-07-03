@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.Practices.Unity.InterceptionExtension;
 
-namespace UnityExtension
+namespace Unity.LoggingExtension
 {
 	internal abstract class LoggingInterceptionBehavior : IInterceptionBehavior
 	{

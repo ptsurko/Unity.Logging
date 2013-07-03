@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using Microsoft.Practices.Unity;
 
-namespace UnityExtension
+namespace Unity.LoggingExtension
 {
 	public interface ILoggingExtensionConfigurator : IUnityContainerExtensionConfigurator
 	{

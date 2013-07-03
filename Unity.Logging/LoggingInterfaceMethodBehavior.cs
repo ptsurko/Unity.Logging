@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Practices.Unity.InterceptionExtension;
 
-namespace UnityExtension
+namespace Unity.LoggingExtension
 {
     internal class LoggingInterfaceMethodBehavior : LoggingInterceptionBehavior
     {

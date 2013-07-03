@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.ObjectBuilder;
 
-namespace UnityExtension
+namespace Unity.LoggingExtension
 {
 	public class LoggingExtension : UnityContainerExtension, ILoggingExtensionConfigurator
 	{

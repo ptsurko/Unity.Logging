@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.Practices.Unity.InterceptionExtension;
 
-namespace UnityExtension
+namespace Unity.LoggingExtension
 {
 	internal class LoggingVirtualMethodBehavior : LoggingInterceptionBehavior
 	{

@@ -1,9 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityExtension", "UnityExtension\UnityExtension.csproj", "{150C064F-9356-47AE-88BD-58E7B2798218}"
+# Visual Studio 2013
+VisualStudioVersion = 12.0.20617.1 PREVIEW
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Logging", "Unity.Logging\Unity.Logging.csproj", "{150C064F-9356-47AE-88BD-58E7B2798218}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityExtensions.Tests", "UnityExtensions.Tests\UnityExtensions.Tests.csproj", "{3F77FBB1-6A4B-4470-9EE9-C373210AC4D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Logging.Tests", "Unity.Logging.Tests\Unity.Logging.Tests.csproj", "{3F77FBB1-6A4B-4470-9EE9-C373210AC4D6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{53480D29-CD05-4503-A788-8C45215B024D}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
