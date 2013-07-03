@@ -7,83 +7,83 @@ using Microsoft.Practices.Unity.InterceptionExtension;
 
 namespace Unity.LoggingExtension
 {
-	internal abstract class LoggingInterceptionBehavior : IInterceptionBehavior
-	{
-		private readonly ILogger _logger;
-		private readonly PropertyMappingDictionary _propertyMappingDictionary;
+    internal abstract class LoggingInterceptionBehavior : IInterceptionBehavior
+    {
+        private readonly ILogger _logger;
+        private readonly PropertyMappingDictionary _propertyMappingDictionary;
 
-		protected LoggingInterceptionBehavior(ILogger logger, PropertyMappingDictionary propertyMappingDictionary)
-		{
-			_logger = logger;
-			_propertyMappingDictionary = propertyMappingDictionary;
-		}
+        protected LoggingInterceptionBehavior(ILogger logger, PropertyMappingDictionary propertyMappingDictionary)
+        {
+            _logger = logger;
+            _propertyMappingDictionary = propertyMappingDictionary;
+        }
 
-		protected abstract bool IsMethodRequireLogging(IMethodInvocation input);
+        protected abstract bool IsMethodRequireLogging(IMethodInvocation input);
 
-		public IMethodReturn Invoke(IMethodInvocation input, GetNextInterceptionBehaviorDelegate getNext)
-		{
-			var methodInfo = getNext();
+        public IMethodReturn Invoke(IMethodInvocation input, GetNextInterceptionBehaviorDelegate getNext)
+        {
+            var methodInfo = getNext();
 
-			var isLoggingRequired = IsMethodRequireLogging(input);
-			
-			if (isLoggingRequired)
-			{
-				var parameters = GetParametersWithValues(input);
+            var isLoggingRequired = IsMethodRequireLogging(input);
 
-				_logger.Log(string.Format("Entering {0} : {1}", input.MethodBase.Name, string.Join(", ", parameters.Select(p => string.Format("{0}: {1}", p.Key.Name, p.Value)))));
-			}
+            if (isLoggingRequired)
+            {
+                var parameters = GetParametersWithValues(input);
 
-			var methodReturn = methodInfo.Invoke(input, getNext);
-			
-			if (isLoggingRequired)
-			{
-				var result = GetResultValue(methodReturn);
+                _logger.Log(string.Format("Entering {0} : {1}", input.MethodBase.Name, string.Join(", ", parameters.Select(p => string.Format("{0}: {1}", p.Key.Name, p.Value)))));
+            }
 
-				_logger.Log(string.Format("Leaving {0} : result - {1}", input.MethodBase.Name, result));
-			}
+            var methodReturn = methodInfo.Invoke(input, getNext);
 
-			return methodReturn;
-		}
+            if (isLoggingRequired)
+            {
+                var result = GetResultValue(methodReturn);
 
-		public IEnumerable<Type> GetRequiredInterfaces()
-		{
-			return Type.EmptyTypes;
-		}
+                _logger.Log(string.Format("Leaving {0} : result - {1}", input.MethodBase.Name, result));
+            }
 
-		public bool WillExecute
-		{
-			get { return true; }
-		}
+            return methodReturn;
+        }
 
-		private IEnumerable<KeyValuePair<ParameterInfo, object>> GetParametersWithValues(IMethodInvocation input)
-		{
-			var result = new List<KeyValuePair<ParameterInfo, object>>();
-			var parameters = input.MethodBase.GetParameters();
-			for (var i = 0; i < parameters.Count(); i++)
-			{
-				LambdaExpression parameterTypeMap;
-				if (_propertyMappingDictionary.TryGetValue(parameters[i].ParameterType, out parameterTypeMap))
-				{
-					result.Add(new KeyValuePair<ParameterInfo, object>(parameters[i], parameterTypeMap.Compile().DynamicInvoke(input.Arguments[i])));
-				}
-				else
-				{
-					result.Add(new KeyValuePair<ParameterInfo, object>(parameters[i], input.Arguments[i]));
-				}
-			}
-			return result;
-		}
+        public IEnumerable<Type> GetRequiredInterfaces()
+        {
+            return Type.EmptyTypes;
+        }
 
-		private object GetResultValue(IMethodReturn methodReturn)
-		{
-			LambdaExpression parameterTypeMap;
+        public bool WillExecute
+        {
+            get { return true; }
+        }
 
-			if (methodReturn.ReturnValue != null && _propertyMappingDictionary.TryGetValue(methodReturn.ReturnValue.GetType(), out parameterTypeMap))
-			{
-				return parameterTypeMap.Compile().DynamicInvoke(methodReturn.ReturnValue);
-			}
+        private IEnumerable<KeyValuePair<ParameterInfo, object>> GetParametersWithValues(IMethodInvocation input)
+        {
+            var result = new List<KeyValuePair<ParameterInfo, object>>();
+            var parameters = input.MethodBase.GetParameters();
+            for (var i = 0; i < parameters.Count(); i++)
+            {
+                LambdaExpression parameterTypeMap;
+                if (_propertyMappingDictionary.TryGetValue(parameters[i].ParameterType, out parameterTypeMap))
+                {
+                    result.Add(new KeyValuePair<ParameterInfo, object>(parameters[i], parameterTypeMap.Compile().DynamicInvoke(input.Arguments[i])));
+                }
+                else
+                {
+                    result.Add(new KeyValuePair<ParameterInfo, object>(parameters[i], input.Arguments[i]));
+                }
+            }
+            return result;
+        }
 
-			return methodReturn.ReturnValue;
-		}
-	}
+        private object GetResultValue(IMethodReturn methodReturn)
+        {
+            LambdaExpression parameterTypeMap;
+
+            if (methodReturn.ReturnValue != null && _propertyMappingDictionary.TryGetValue(methodReturn.ReturnValue.GetType(), out parameterTypeMap))
+            {
+                return parameterTypeMap.Compile().DynamicInvoke(methodReturn.ReturnValue);
+            }
+
+            return methodReturn.ReturnValue;
+        }
+    }
 }

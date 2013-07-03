@@ -45,7 +45,7 @@ namespace Unity.LoggingExtension
 	}
 
     [Log]
-	public class FilePersistence //: IPersistence
+	public class FilePersistence
 	{
         public virtual IEvent Store(IEvent @event, DateTime? date = null)
 		{
@@ -72,13 +72,7 @@ namespace Unity.LoggingExtension
 		}
 	}
 
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Method | AttributeTargets.Property, Inherited = true)]
-	public class LogAttribute : Attribute
-	{
-
-	}
-
-	public interface IEvent
+    public interface IEvent
 	{
 		long Id { get; set; }
 	}

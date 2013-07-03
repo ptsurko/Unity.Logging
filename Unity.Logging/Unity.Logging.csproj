@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ILogMethodInvocation.cs" />
+    <Compile Include="LogAttribute.cs" />
     <Compile Include="LoggingExtension.cs" />
     <Compile Include="ILoggingExtensionConfigurator.cs" />
     <Compile Include="LoggingInterceptionBehavior.cs" />

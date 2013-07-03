@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Unity.LoggingExtension
 {
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static IEnumerable<T> GetTypeMembersCustomAttributes<T>(this Type type) where T : Attribute
         {
