@@ -17,7 +17,7 @@ namespace Unity.LoggingExtension
 
             //var methods = _interfaceInterceptor.GetInterceptableMethods(context.OriginalBuildKey.Type, context.BuildKey.Type);
 
-            var loggingInterceptionBehavior = new LoggingInterfaceMethodBehavior(context.NewBuildUp<ILogger>(), context.NewBuildUp<PropertyMappingDictionary>(), context.Existing.GetType());
+            var loggingInterceptionBehavior = new LoggingInterfaceMethodBehavior(context.NewBuildUp<ILogMethodInvocation>(), context.NewBuildUp<PropertyMappingDictionary>(), context.Existing.GetType());
 
             context.Existing = Intercept.ThroughProxy(context.OriginalBuildKey.Type, context.Existing, _interfaceInterceptor, new[] { loggingInterceptionBehavior });
         }

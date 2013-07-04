@@ -5,8 +5,8 @@ namespace Unity.LoggingExtension
 {
 	internal class LoggingVirtualMethodBehavior : LoggingInterceptionBehavior
 	{
-		public LoggingVirtualMethodBehavior(ILogger logger, PropertyMappingDictionary propertyMappingDictionary)
-			: base(logger, propertyMappingDictionary)
+        public LoggingVirtualMethodBehavior(ILogMethodInvocation logMethodInvocation, PropertyMappingDictionary propertyMappingDictionary)
+            : base(logMethodInvocation, propertyMappingDictionary)
 		{
 		}
 

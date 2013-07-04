@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,12 +10,12 @@ namespace Unity.LoggingExtension
 {
     internal abstract class LoggingInterceptionBehavior : IInterceptionBehavior
     {
-        private readonly ILogger _logger;
+        private readonly ILogMethodInvocation _logMethodInvocation;
         private readonly PropertyMappingDictionary _propertyMappingDictionary;
 
-        protected LoggingInterceptionBehavior(ILogger logger, PropertyMappingDictionary propertyMappingDictionary)
+        protected LoggingInterceptionBehavior(ILogMethodInvocation logMethodInvocation, PropertyMappingDictionary propertyMappingDictionary)
         {
-            _logger = logger;
+            _logMethodInvocation = logMethodInvocation;
             _propertyMappingDictionary = propertyMappingDictionary;
         }
 
@@ -30,7 +31,7 @@ namespace Unity.LoggingExtension
             {
                 var parameters = GetParametersWithValues(input);
 
-                _logger.Log(string.Format("Entering {0} : {1}", input.MethodBase.Name, string.Join(", ", parameters.Select(p => string.Format("{0}: {1}", p.Key.Name, p.Value)))));
+                _logMethodInvocation.LogMethodEntering(input.MethodBase, parameters);
             }
 
             var methodReturn = methodInfo.Invoke(input, getNext);
@@ -39,7 +40,7 @@ namespace Unity.LoggingExtension
             {
                 var result = GetResultValue(methodReturn);
 
-                _logger.Log(string.Format("Leaving {0} : result - {1}", input.MethodBase.Name, result));
+                _logMethodInvocation.LogMethodLeaving(input.MethodBase, result);
             }
 
             return methodReturn;
@@ -61,17 +62,35 @@ namespace Unity.LoggingExtension
             var parameters = input.MethodBase.GetParameters();
             for (var i = 0; i < parameters.Count(); i++)
             {
-                LambdaExpression parameterTypeMap;
-                if (_propertyMappingDictionary.TryGetValue(parameters[i].ParameterType, out parameterTypeMap))
-                {
-                    result.Add(new KeyValuePair<ParameterInfo, object>(parameters[i], parameterTypeMap.Compile().DynamicInvoke(input.Arguments[i])));
-                }
-                else
-                {
-                    result.Add(new KeyValuePair<ParameterInfo, object>(parameters[i], input.Arguments[i]));
-                }
+                result.Add(GetFormatedParameterValue(parameters[i], input.Arguments[i]));
             }
             return result;
+        }
+
+        private KeyValuePair<ParameterInfo, object> GetFormatedParameterValue(ParameterInfo parameter, object parameterValue)
+        {
+            LambdaExpression parameterTypeMap;
+            if (parameter.ParameterType.IsArray || typeof(IEnumerable).IsAssignableFrom(parameter.ParameterType))
+            {
+                var result = new List<object>();
+                //TODO: consider nested lists
+                foreach (var item in (IEnumerable)parameterValue)
+                {
+                    result.Add(_propertyMappingDictionary.TryGetValue(item.GetType(), out parameterTypeMap)
+                        ? parameterTypeMap.Compile().DynamicInvoke(item)
+                        : item);
+                }
+
+                return new KeyValuePair<ParameterInfo, object>(parameter, result);
+            }
+            else if (_propertyMappingDictionary.TryGetValue(parameter.ParameterType, out parameterTypeMap))
+            {
+                return new KeyValuePair<ParameterInfo, object>(parameter, parameterTypeMap.Compile().DynamicInvoke(parameterValue));
+            }
+            else
+            {
+                return new KeyValuePair<ParameterInfo, object>(parameter, parameterValue);
+            }
         }
 
         private object GetResultValue(IMethodReturn methodReturn)

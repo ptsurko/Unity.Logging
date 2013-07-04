@@ -12,6 +12,7 @@ namespace Unity.LoggingExtension
 		protected override void Initialize()
 		{
 			Context.Container.RegisterInstance(new PropertyMappingDictionary(), new ContainerControlledLifetimeManager());
+            Context.Container.RegisterType<ILogMethodInvocation, LoggerMethodInvocation>(new ContainerControlledLifetimeManager());
 
 			Context.Strategies.AddNew<LoggingInterfaceMethodBuildStrategy>(UnityBuildStage.PostInitialization);
 			Context.Strategies.AddNew<LoggingVirtualMethodBuildStrategy>(UnityBuildStage.PreCreation);

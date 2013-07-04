@@ -9,8 +9,8 @@ namespace Unity.LoggingExtension
     {
         private readonly Type _actualInterceptedType;
 
-        public LoggingInterfaceMethodBehavior(ILogger logger, PropertyMappingDictionary propertyMappingDictionary, Type actualInterceptedType)
-            : base(logger, propertyMappingDictionary)
+        public LoggingInterfaceMethodBehavior(ILogMethodInvocation logMethodInvocation, PropertyMappingDictionary propertyMappingDictionary, Type actualInterceptedType)
+            : base(logMethodInvocation, propertyMappingDictionary)
         {
             _actualInterceptedType = actualInterceptedType;
         }

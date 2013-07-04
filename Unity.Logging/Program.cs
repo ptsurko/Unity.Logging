@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Practices.Unity;
 
 namespace Unity.LoggingExtension
@@ -10,7 +12,7 @@ namespace Unity.LoggingExtension
 			var unityContainer = new UnityContainer();
 			unityContainer.AddNewExtension<LoggingExtension>();
 			unityContainer.Configure<ILoggingExtensionConfigurator>()
-				.FormatType<IEvent>(e => string.Format("[{0}]", e.Id));
+				.FormatType<IEvent>(e => string.Format("{0}", e.Id));
 
 			unityContainer.RegisterType<ILogger, Logger>();
 			unityContainer.RegisterType<FilePersistence>("File");
@@ -18,7 +20,7 @@ namespace Unity.LoggingExtension
 			unityContainer.RegisterType<IPersistence, MongoPersistence>("Mongo");
 			
 			var persistence1 = unityContainer.Resolve<FilePersistence>("File");
-			persistence1.Store(date: DateTime.Now, @event: new Event(2));
+			persistence1.Store(date: DateTime.Now, @event: new[] {new Event(2)});
 
 			var persistence2 = unityContainer.Resolve<IPersistence>("Db");
 			persistence2.Store(new Event(1), DateTime.Now);
@@ -47,11 +49,11 @@ namespace Unity.LoggingExtension
     [Log]
 	public class FilePersistence
 	{
-        public virtual IEvent Store(IEvent @event, DateTime? date = null)
+        public virtual IEvent Store(IEnumerable<IEvent> @event, DateTime? date = null)
 		{
 			Console.WriteLine("File Store");
 
-			return @event;
+			return @event.First();
 		}
 	}
 
