@@ -12,7 +12,9 @@ namespace Unity.LoggingExtension
 			var unityContainer = new UnityContainer();
 			unityContainer.AddNewExtension<LoggingExtension>();
 			unityContainer.Configure<ILoggingExtensionConfigurator>()
-				.FormatType<IEvent>(e => string.Format("{0}", e.Id));
+				.FormatType<DateTime>(e => string.Format("d:{0}", e.ToLocalTime()))
+				.FormatType<IEvent>(e => string.Format("ie{0}", e.Id))
+				.FormatType<Event>(e => string.Format("e:{0}", e.Id));
 
 			unityContainer.RegisterType<ILogger, Logger>();
 			unityContainer.RegisterType<FilePersistence>("File");
@@ -20,7 +22,7 @@ namespace Unity.LoggingExtension
 			unityContainer.RegisterType<IPersistence, MongoPersistence>("Mongo");
 			
 			var persistence1 = unityContainer.Resolve<FilePersistence>("File");
-			persistence1.Store(date: DateTime.Now, @event: new[] {new Event(2)});
+			persistence1.Store(date: DateTime.Now, @event: new[] {new Event2(2)});
 
 			var persistence2 = unityContainer.Resolve<IPersistence>("Db");
 			persistence2.Store(new Event(1), DateTime.Now);
@@ -88,4 +90,12 @@ namespace Unity.LoggingExtension
 
 		public long Id { get; set; }
 	}
+
+    public class Event2 : Event
+    {
+        public Event2(long id): base(id)
+        {
+            
+        }
+    }
 }
